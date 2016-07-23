@@ -1,11 +1,11 @@
 #include "Objects.h"
 
-
-Objects::Objects(void)
+Objects::Objects( )
 {
+
 }
 
-
-Objects::~Objects(void)
+Objects::~Objects( )
 {
+
 }

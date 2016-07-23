@@ -3,9 +3,11 @@
 
 class Objects
 {
+private:
+
 public:
-	Objects(void);
-	~Objects(void);
+	Objects( );
+	~Objects( );
 };
 
 #endif

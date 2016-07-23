@@ -1,7 +1,6 @@
 #ifndef _TANK_H_
 #define _TANK_H_
 
-
 #include "Service.h"
 
 class Weapon;
@@ -9,17 +8,33 @@ class Weapon;
 class Tank
 {
 private:
-	// Health power of the tank
-	float m_health;
+	// Tank's current X position
+	float m_fXPos;
 
-	// Armor of the tank
-	float m_armor;
+	// Tank's current Y posititon
+	float m_fYPos;
 
-	// Speed of the tank
-	float m_speed;
+	// Tank's health power
+	float m_fHealth;
 
-	// Current weapon
-	Weapon* m_weapon;
+	// Tank's armor
+	float m_fArmor;
+
+	// Tank's speed
+	float m_fSpeed;
+
+	// Tank's current weapon
+	Weapon* m_pWeapon;
+
+	// Tank's texture
+	HTEXTURE m_hTankTex;
+	
+	// Tank's animation
+	hgeAnimation* m_pTankAnimated;
+
+	// Tank's stopped sprite
+	hgeSprite* m_pTankStopped;
+
 public:
 	// Constructor
 	Tank( );
@@ -27,7 +42,7 @@ public:
 	// Destructor
 	~Tank( );
 
-	// Get the health power
+	// Get  health power
 	float getHealth( ) const;
 
 	// Get the armor
@@ -63,34 +78,35 @@ public:
 
 inline float Tank::getHealth( ) const
 {
-	return m_health;
+	return m_fHealth;
 }
 
 inline float Tank::getArmor( ) const
 {
-	return m_armor;
+	return m_fArmor;
 }
 
 inline float Tank::getSpeed( ) const 
 {
-	return m_speed;
+	return m_fSpeed;
 }
 
-void Tank::setHealth( float health )
+inline void Tank::setHealth( float health )
 {
-	m_health = health;
+	m_fHealth = health;
 }
 
-
-void Tank::setArmor( float armor )
+inline void Tank::setArmor( float armor )
 {
-	m_armor = armor;
+	m_fArmor = armor;
 }
 
-void Tank::setSpeed( float speed )
+inline void Tank::setSpeed( float speed )
 {
-	m_speed = speed;
+	m_fSpeed = speed;
 }
 
 #endif
 
+
+// std::rotate ( vec.rbegin() , vec.rbegin()+1 , vec.rend() ) ;

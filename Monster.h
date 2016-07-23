@@ -22,28 +22,28 @@ public:
 	// Destructor
 	virtual ~Monster( );
 
-	// Get monster health
+	// Get monster's health
 	float getHealth( ) const;
 
-	// Get monster armor
+	// Get monster's armor
 	float getArmor( ) const;
 
-	// Get monster damage
+	// Get monster's damage
 	float getDamage( ) const;
 
-	// Get monster speed
+	// Get monster's speed
 	float getSpeed( ) const;
 
-	// Set monster health
+	// Set monster's health
 	void setHealth( float health );
 
-	// Set monster armor
+	// Set monster's armor
 	void setArmor( float armor );
 
-	// Set monster damage
+	// Set monster's damage
 	void setDamage( float damage );
 
-	// Set monster speed
+	// Set monster's speed
 	void setSpeed( float speed );
 };
 
