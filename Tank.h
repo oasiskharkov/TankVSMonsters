@@ -8,11 +8,8 @@ class Weapon;
 class Tank
 {
 private:
-	// Tank's current X position
-	float m_fXPos;
-
-	// Tank's current Y posititon
-	float m_fYPos;
+	// Tank's current position
+	hgeVector m_vPos;
 
 	// Tank's health power
 	float m_fHealth;
@@ -23,8 +20,11 @@ private:
 	// Tank's speed
 	float m_fSpeed;
 
-	// Tank's current weapon
-	Weapon* m_pWeapon;
+	// Tank's direction
+	float m_fDirection;
+
+	// Tank's weapons
+	std::vector<Weapon*> m_vWeapons;
 
 	// Tank's texture
 	HTEXTURE m_hTankTex;
@@ -35,33 +35,59 @@ private:
 	// Tank's stopped sprite
 	hgeSprite* m_pTankStopped;
 
+	// Prepeare tank's resources
+	bool prepareResources();
+
+	// Release all allocated memory
+	void release();
+
+	// Private copy constructor
+	Tank( const Tank& );
+
+	// Private copy assignment operator
+	Tank& operator = ( const Tank& );
 public:
 	// Constructor
-	Tank( );
+	Tank( float xPos, float yPos, float health, float armor, float speed, float direction, const char* tank );
 
 	// Destructor
 	~Tank( );
+	
+	// Get current tank's position
+	hgeVector getPosition( ) const;
 
-	// Get  health power
+	// Get tank's health power
 	float getHealth( ) const;
 
-	// Get the armor
+	// Get tank's armor
 	float getArmor( ) const;
 
-	// Get the speed 
+	// Get tank's speed 
 	float getSpeed( ) const; 
 
-	// Set health power
+	// Get tank's direction
+	float getDirection( ) const;
+
+	// Get current tank's weapon
+	Weapon* getCurrentWeapon( );
+
+	// Set tank's weapon list
+	void setWeaponList( );
+
+	// Set tank's health power
 	void setHealth( float health );
 
-	// Set armor
+	// Set tank's armor
 	void setArmor( float armor );
 
-	// Set speed
+	// Set tank's speed
 	void setSpeed( float speed );
 
-	// Ghange the weapon
-	void changeWeapon( );
+	// Set tank's direction
+	void setDirection( float direction );
+
+	// Ghange tank's weapon
+	void changeWeapon( bool clockwise = true );
 
 	// Tank stops
 	void stop( );
@@ -76,6 +102,11 @@ public:
 	void turn( bool toTheRight ); 
 };
 
+inline hgeVector Tank::getPosition( ) const
+{
+	return m_vPos;
+}
+
 inline float Tank::getHealth( ) const
 {
 	return m_fHealth;
@@ -89,6 +120,16 @@ inline float Tank::getArmor( ) const
 inline float Tank::getSpeed( ) const 
 {
 	return m_fSpeed;
+}
+
+inline float Tank::getDirection( ) const
+{
+	return m_fDirection;
+}
+
+inline Weapon* Tank::getCurrentWeapon( )
+{
+	return m_vWeapons.back( );
 }
 
 inline void Tank::setHealth( float health )
@@ -106,7 +147,10 @@ inline void Tank::setSpeed( float speed )
 	m_fSpeed = speed;
 }
 
+inline void Tank::setDirection( float direction )
+{
+	m_fDirection = direction;
+}
+	
+
 #endif
-
-
-// std::rotate ( vec.rbegin() , vec.rbegin()+1 , vec.rend() ) ;

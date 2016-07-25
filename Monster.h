@@ -1,26 +1,62 @@
 #ifndef _MONSTER_H_
 #define _MONSTER_H_
 
+#include "Service.h"
+
 class Monster
 {
 private:
-	// Health power of the monster
-	float m_health;
+	// Monster's type
+	monster_type m_eMonsterType;
 
-	// Armor of the monster
-	float m_armor;
+	// Current monster's position
+	hgeVector m_vPos;
 
-	// Damage that could cause a monster
-	float m_damage;
+	// Monster's health power
+	float m_fHealth;
 
-	// Speed of the monster
-	float m_speed;
+	// Monster's armor
+	float m_fArmor;
+
+	// Monster's damage
+	float m_fDamage;
+
+	// Monster's speed
+	float m_fSpeed;
+
+	// Monster's direction
+	float m_fDirection;
+
+	// Monster's texture
+	HTEXTURE m_hMonsterTex;
+	
+	// Monster's animation
+	hgeAnimation* m_pMonsterAnimated;
+
+	// Monster's stopped sprite
+	hgeSprite* m_pMonsterStopped;
+
+	// Prepeare monster's resources
+	bool prepareResources();
+
+	// Release all allocated memory
+	void release();
+
+	// Private copy constructor
+	Monster( const Monster& );
+
+	// Private copy assignment operator
+	Monster& operator = ( const Monster& );
 public:
 	// Constructor
-	Monster( );
+	Monster( monster_type type, float xPos, float yPos, float health, float armor, float damage, 
+		float speed, float direction, const char* monster );
 
 	// Destructor
 	virtual ~Monster( );
+		
+	// Get monster's type
+	monster_type getType( ) const;
 
 	// Get monster's health
 	float getHealth( ) const;
@@ -34,6 +70,9 @@ public:
 	// Get monster's speed
 	float getSpeed( ) const;
 
+	// Get monster's direction
+	float getDirection( ) const;
+	
 	// Set monster's health
 	void setHealth( float health );
 
@@ -45,46 +84,64 @@ public:
 
 	// Set monster's speed
 	void setSpeed( float speed );
+
+	// Set monster's direction
+	void setDirection( float direction );
 };
 
-float Monster::getHealth( ) const
+inline monster_type Monster::getType( ) const
 {
-	return m_health;
+	return m_eMonsterType;
 }
 
-float Monster::getArmor( ) const
+inline float Monster::getHealth( ) const
 {
-	return m_armor;
+	return m_fHealth;
 }
 
-float Monster::getDamage( ) const
+inline float Monster::getArmor( ) const
 {
-	return m_damage;
+	return m_fArmor;
 }
 
-float Monster::getSpeed( ) const
+inline float Monster::getDamage( ) const
 {
-	return m_speed;
+	return m_fDamage;
 }
 
-void Monster::setHealth( float health )
+inline float Monster::getSpeed( ) const
 {
-	m_health = health;
+	return m_fSpeed;
 }
 
-void Monster::setArmor( float armor )
+inline float Monster::getDirection( ) const
 {
-	m_armor = armor;
+	return m_fDirection;
+}
+
+inline void Monster::setHealth( float health )
+{
+	m_fHealth = health;
+}
+
+inline void Monster::setArmor( float armor )
+{
+	m_fArmor = armor;
 }
 	
-void Monster::setDamage( float damage )
+inline void Monster::setDamage( float damage )
 {
-	m_damage = damage;
+	m_fDamage = damage;
 }
 
 void Monster::setSpeed( float speed )
 {
-	m_speed = speed;
+	m_fSpeed = speed;
+}
+
+void Monster::setDirection( float direction )
+{
+	m_fDirection = direction;
 }
 
 #endif

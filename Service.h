@@ -4,7 +4,9 @@
 #include "hge.h"
 #include "hgesprite.h"
 #include "hgeanim.h"
+#include "hgevector.h"
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <memory>
 
@@ -16,10 +18,14 @@ class Scene;
 extern HGE* hge ;
 extern Objects* objects;
 extern Scene* scene;
+extern unsigned short lives;
+extern float dt;
 
 // enumerations
 enum weapon_type { MACHINE_GUN, CANNON, ROCKET_LAUNCHER };
-enum game_errors { LOAD_SCENE_SOURCES };
+enum packet_type { BULLET, SHELL, ROCKET };
+enum monster_type { BEAST, DAEMON, REPTILE };
+enum game_errors { LOAD_SCENE_SOURCES, LOAD_TANK_SOURCES, LOAD_WEAPON_SOURCES, LOAD_PACKET_SOURCES, LOAD_MONSTER_SOURCES };
 
 // constants
 const int GAME_WIDTH = 1024;

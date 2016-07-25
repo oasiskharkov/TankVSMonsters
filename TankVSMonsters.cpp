@@ -3,15 +3,25 @@
 #include "Scene.h"
 
 HGE* hge = 0;
-
 Objects* objects = 0;
 Scene* scene = 0;
+unsigned short lives = 20;
+float dt;
 
 void ShowErrorMessageIfAnyAndSafeExit( const std::string& error = "" );
 void ReleaseGameSources( );
 
 bool FrameFunc( )
 {
+	// Get timer delta
+	dt = hge->Timer_GetDelta();
+
+	// Press ESC to exit
+	if (hge->Input_GetKeyState(HGEK_ESCAPE))
+	{
+		return true;
+	}
+
 	return false;	
 }
 
@@ -55,6 +65,9 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 			{
 			case game_errors::LOAD_SCENE_SOURCES:
 				ShowErrorMessageIfAnyAndSafeExit("Can't load scene sources.");
+				return 0;
+			case game_errors::LOAD_TANK_SOURCES:
+				ShowErrorMessageIfAnyAndSafeExit("Can't load tank sources.");
 				return 0;
 			}
 		}
