@@ -11,6 +11,9 @@ private:
 	// Tank's current position
 	hgeVector m_vPos;
 
+	// Tank's direction
+	hgeVector m_vDir;
+
 	// Tank's health power
 	float m_fHealth;
 
@@ -19,9 +22,6 @@ private:
 
 	// Tank's speed
 	float m_fSpeed;
-
-	// Tank's direction
-	float m_fDirection;
 
 	// Tank's weapons
 	std::vector<Weapon*> m_vWeapons;
@@ -48,13 +48,16 @@ private:
 	Tank& operator = ( const Tank& );
 public:
 	// Constructor
-	Tank( float xPos, float yPos, float health, float armor, float speed, float direction, const char* tank );
+	Tank( float xPos, float yPos, float health, float armor, float speed, const char* tank );
 
 	// Destructor
 	~Tank( );
 	
 	// Get current tank's position
 	hgeVector getPosition( ) const;
+
+	// Get tank's direction
+	hgeVector getDirection( ) const;
 
 	// Get tank's health power
 	float getHealth( ) const;
@@ -65,11 +68,14 @@ public:
 	// Get tank's speed 
 	float getSpeed( ) const; 
 
-	// Get tank's direction
-	float getDirection( ) const;
-
 	// Get current tank's weapon
 	Weapon* getCurrentWeapon( );
+
+	// Set tank's position
+	void setPosition( hgeVector position );
+
+	// Set tank's direction
+	void setDirection( hgeVector direction );
 
 	// Set tank's weapon list
 	void setWeaponList( );
@@ -82,10 +88,7 @@ public:
 
 	// Set tank's speed
 	void setSpeed( float speed );
-
-	// Set tank's direction
-	void setDirection( float direction );
-
+	
 	// Ghange tank's weapon
 	void changeWeapon( bool clockwise = true );
 
@@ -107,6 +110,11 @@ inline hgeVector Tank::getPosition( ) const
 	return m_vPos;
 }
 
+inline hgeVector Tank::getDirection( ) const
+{
+	return m_vDir;
+}
+
 inline float Tank::getHealth( ) const
 {
 	return m_fHealth;
@@ -122,14 +130,19 @@ inline float Tank::getSpeed( ) const
 	return m_fSpeed;
 }
 
-inline float Tank::getDirection( ) const
-{
-	return m_fDirection;
-}
-
 inline Weapon* Tank::getCurrentWeapon( )
 {
 	return m_vWeapons.back( );
+}
+
+inline void Tank::setPosition( hgeVector position )
+{
+	m_vPos = position;
+}
+
+inline void Tank::setDirection( hgeVector direction )
+{
+	m_vDir = direction;
 }
 
 inline void Tank::setHealth( float health )
@@ -146,11 +159,5 @@ inline void Tank::setSpeed( float speed )
 {
 	m_fSpeed = speed;
 }
-
-inline void Tank::setDirection( float direction )
-{
-	m_fDirection = direction;
-}
-	
 
 #endif

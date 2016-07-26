@@ -12,6 +12,9 @@ private:
 	// Current monster's position
 	hgeVector m_vPos;
 
+	// Monster's direction
+	hgeVector m_vDir;
+
 	// Monster's health power
 	float m_fHealth;
 
@@ -23,9 +26,6 @@ private:
 
 	// Monster's speed
 	float m_fSpeed;
-
-	// Monster's direction
-	float m_fDirection;
 
 	// Monster's texture
 	HTEXTURE m_hMonsterTex;
@@ -50,13 +50,19 @@ private:
 public:
 	// Constructor
 	Monster( monster_type type, float xPos, float yPos, float health, float armor, float damage, 
-		float speed, float direction, const char* monster );
+		float speed, const char* monster );
 
 	// Destructor
 	virtual ~Monster( );
 		
 	// Get monster's type
 	monster_type getType( ) const;
+
+	// Get monster's position
+	hgeVector getPosition( ) const;
+
+	// Get monster's direction
+	hgeVector getDirection( ) const;
 
 	// Get monster's health
 	float getHealth( ) const;
@@ -70,9 +76,12 @@ public:
 	// Get monster's speed
 	float getSpeed( ) const;
 
-	// Get monster's direction
-	float getDirection( ) const;
+	// Set monster's position
+	void setPosition( hgeVector position );
 	
+	// Set monster's direction
+	void setDirection( hgeVector direction );
+
 	// Set monster's health
 	void setHealth( float health );
 
@@ -84,14 +93,21 @@ public:
 
 	// Set monster's speed
 	void setSpeed( float speed );
-
-	// Set monster's direction
-	void setDirection( float direction );
 };
 
 inline monster_type Monster::getType( ) const
 {
 	return m_eMonsterType;
+}
+
+inline hgeVector Monster::getPosition( ) const
+{
+	return m_vPos;
+}
+
+inline hgeVector Monster::getDirection( ) const
+{
+	return m_vDir;
 }
 
 inline float Monster::getHealth( ) const
@@ -114,9 +130,14 @@ inline float Monster::getSpeed( ) const
 	return m_fSpeed;
 }
 
-inline float Monster::getDirection( ) const
+inline void Monster::setPosition( hgeVector position )
 {
-	return m_fDirection;
+	m_vPos = position;
+}
+	
+inline void Monster::setDirection( hgeVector direction )
+{
+	m_vDir = direction;
 }
 
 inline void Monster::setHealth( float health )
@@ -137,11 +158,6 @@ inline void Monster::setDamage( float damage )
 void Monster::setSpeed( float speed )
 {
 	m_fSpeed = speed;
-}
-
-void Monster::setDirection( float direction )
-{
-	m_fDirection = direction;
 }
 
 #endif

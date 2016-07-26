@@ -1,7 +1,7 @@
 #include "Tank.h"
 
-Tank::Tank( float xPos, float yPos, float health, float armor, float speed, float direction, const char* tank ) 
-	: m_vPos( xPos, yPos ), m_fHealth( health ), m_fArmor( armor ), m_fSpeed( speed ), m_fDirection( direction ),
+Tank::Tank( float xPos, float yPos, float health, float armor, float speed, const char* tank ) 
+	: m_vPos( xPos, yPos ), m_vDir( 0.0f, -1.0f ), m_fHealth( health ), m_fArmor( armor ), m_fSpeed( speed ),
 	m_pTankAnimated( 0 ), m_pTankStopped( 0 ) 
 {
 	m_hTankTex = hge->Texture_Load( tank );

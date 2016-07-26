@@ -1,9 +1,9 @@
 #include "Monster.h"
 
 
-Monster::Monster( monster_type type, float xPos, float yPos, float health, float armor, float damage, float speed, float direction,
+Monster::Monster( monster_type type, float xPos, float yPos, float health, float armor, float damage, float speed,
 					  const char* monster ) : m_eMonsterType( type ), m_vPos( xPos, yPos ), m_fHealth( health ), m_fArmor( armor ), 
-					  m_fDamage( damage ), m_fSpeed( speed ), m_fDirection( direction ), m_pMonsterAnimated( 0 ), m_pMonsterStopped( 0 )
+					  m_fDamage( damage ), m_fSpeed( speed ), m_pMonsterAnimated( 0 ), m_pMonsterStopped( 0 )
 {
 	m_hMonsterTex = hge->Texture_Load( monster );
 
