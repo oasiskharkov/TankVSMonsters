@@ -14,13 +14,15 @@ void ReleaseGameSources( );
 bool FrameFunc( )
 {
 	// Get timer delta
-	dt = hge->Timer_GetDelta();
+	dt = hge->Timer_GetDelta( );
 
 	// Press ESC to exit
-	if (hge->Input_GetKeyState(HGEK_ESCAPE))
+	if ( hge->Input_GetKeyState( HGEK_ESCAPE ) )
 	{
 		return true;
 	}
+
+	objects->frameObjects( );
 
 	return false;	
 }
@@ -30,6 +32,8 @@ bool RenderFunc( )
 	hge->Gfx_BeginScene( );
 	
 	scene->renderScene( );
+	
+	objects->renderObjects( );
 	
 	hge->Gfx_EndScene();
 
@@ -57,7 +61,8 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 	{
 		try
 		{
-			scene = Scene::getInstance();
+			scene = Scene::getInstance( );
+			objects = Objects::getInstance( );
 		}
 		catch(game_errors& gerr)
 		{

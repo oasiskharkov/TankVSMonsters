@@ -1,7 +1,10 @@
 #include "Tank.h"
+#include "Objects.h"
 
-Tank::Tank( float xPos, float yPos, float health, float armor, float speed, const char* tank ) 
+Tank::Tank( float xPos, float yPos, float health, float armor, float speed, const char* tank,
+			  std::vector<std::unique_ptr<Weapon>>& weapons,  bool isMoving, bool isBackMoving ) 
 	: m_vPos( xPos, yPos ), m_vDir( 0.0f, -1.0f ), m_fHealth( health ), m_fArmor( armor ), m_fSpeed( speed ),
+	m_rvupWeapons( weapons ), m_bIsMoving ( isMoving ), m_bIsBackMoving( isBackMoving ),
 	m_pTankAnimated( 0 ), m_pTankStopped( 0 ) 
 {
 	m_hTankTex = hge->Texture_Load( tank );
@@ -22,8 +25,8 @@ bool Tank::prepareResources( )
 {
 	try
 	{
-		//m_pTankAnimated = new hgeAnimation()
-		//m_pTankStopped = new hgeSpite()
+		m_pTankAnimated = new hgeAnimation( m_hTankTex, 3, 10.0f, 0.0f, 0.0f, 256.0f, 256.0f ); 
+		m_pTankStopped = new hgeSprite( m_hTankTex, 0.0f, 0.0f, 256.0f, 256.0f );
 	}
 	catch(...)
 	{
@@ -44,10 +47,65 @@ void Tank::changeWeapon( bool clockwise )
 {
 	if( clockwise ) 
 	{
-		std::rotate( m_vWeapons.rbegin( ), m_vWeapons.rbegin( ) + 1, m_vWeapons.rend( ) );
+		std::rotate( m_rvupWeapons.begin( ), m_rvupWeapons.begin( ) + 1, m_rvupWeapons.end( ) );
 	}
 	else
 	{
-		std::rotate( m_vWeapons.begin( ), m_vWeapons.begin( ) + 1, m_vWeapons.end( ) );
+		std::rotate( m_rvupWeapons.rbegin( ), m_rvupWeapons.rbegin( ) + 1, m_rvupWeapons.rend( ) );
 	}
 }
+
+void Tank::frame( ) 
+{
+	if( m_bIsMoving )
+	{
+		hgeVector vSpeed = m_vDir * m_fSpeed;
+		m_vPos += vSpeed * dt;
+	}
+	else if( m_bIsBackMoving )
+	{
+		hgeVector vDirBar( m_vDir );
+		vDirBar.Rotate( M_PI );
+		hgeVector vSpeed = vDirBar * m_fSpeed;
+		m_vPos += vSpeed * dt;
+	}
+}
+
+void Tank::render( )
+{
+	m_bIsMoving ? move( ) : stop( );
+}
+
+void Tank::move( )
+{
+	if( !m_pTankAnimated->IsPlaying( ) )
+	{
+		m_pTankAnimated->Play( );
+	}
+	else
+	{
+		m_pTankAnimated->Update( dt );
+	}
+
+	m_pTankAnimated->SetHotSpot( 128.0f, 128.0f );
+	m_pTankAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2/*Objects::getAngleInRadians( m_vDir.x, m_vDir.y )*/, 0.3f);
+}
+
+void Tank::stop( )
+{
+	m_pTankStopped->SetHotSpot( 128.0f, 128.0f );
+	m_pTankStopped->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2/*Objects::getAngleInRadians( m_vDir.x, m_vDir.y )*/, 0.3f);
+}
+
+void Tank::turn( bool clockwise )
+{
+	float angle = clockwise ? dt * ANGLE_VELOCITY : - dt * ANGLE_VELOCITY;
+	
+	if ( m_bIsBackMoving )
+	{
+		angle = -angle;
+	}
+
+	m_vDir.Rotate( angle );
+}
+

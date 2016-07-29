@@ -23,8 +23,7 @@ bool Monster::prepareResources( )
 {
 	try
 	{
-		//m_pTankAnimated = new hgeAnimation()
-		//m_pTankStopped = new hgeSpite()
+		m_pMonsterAnimated = new hgeAnimation( m_hMonsterTex, 4, 5.0f, 0.0f, 0.0f, 256.0f, 256.0f ); 
 	}
 	catch(...)
 	{
@@ -38,5 +37,4 @@ void Monster::release( )
 	hge->Texture_Free( m_hMonsterTex );
 
 	delete m_pMonsterAnimated;
-	delete m_pMonsterStopped;
 }

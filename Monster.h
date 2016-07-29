@@ -37,10 +37,13 @@ private:
 	hgeSprite* m_pMonsterStopped;
 
 	// Prepeare monster's resources
-	bool prepareResources();
+	bool prepareResources( );
 
 	// Release all allocated memory
-	void release();
+	void release( );
+
+	// Monster moves
+	void move( );
 
 	// Private copy constructor
 	Monster( const Monster& );
@@ -155,7 +158,7 @@ inline void Monster::setDamage( float damage )
 	m_fDamage = damage;
 }
 
-void Monster::setSpeed( float speed )
+inline void Monster::setSpeed( float speed )
 {
 	m_fSpeed = speed;
 }

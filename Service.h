@@ -6,6 +6,7 @@
 #include "hgeanim.h"
 #include "hgevector.h"
 #include <vector>
+#include <cmath>
 #include <algorithm>
 #include <string>
 #include <memory>
@@ -25,11 +26,13 @@ extern float dt;
 enum weapon_type { MACHINE_GUN, CANNON, ROCKET_LAUNCHER };
 enum packet_type { BULLET, SHELL, ROCKET };
 enum monster_type { BEAST, DAEMON, REPTILE };
-enum game_errors { LOAD_SCENE_SOURCES, LOAD_TANK_SOURCES, LOAD_WEAPON_SOURCES, LOAD_PACKET_SOURCES, LOAD_MONSTER_SOURCES };
+enum game_errors { LOAD_SCENE_SOURCES, LOAD_TANK_SOURCES, LOAD_WEAPON_SOURCES, 
+	LOAD_PACKET_SOURCES, LOAD_MONSTER_SOURCES, UNKNOWN_ERROR };
 
 // constants
 const int GAME_WIDTH = 1024;
 const int GAME_HEIGHT = 768;
 const float TILE_STEP = 32.0f;
+const float ANGLE_VELOCITY = 1.0f;
 
 #endif

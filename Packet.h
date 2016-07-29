@@ -113,7 +113,6 @@ inline void Packet::setDamage( float damage )
 	m_fDamage = damage;
 }
 
-
 inline void Packet::setSpeed( float speed )
 {
 	m_fSpeed = speed;

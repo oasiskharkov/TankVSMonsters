@@ -24,7 +24,13 @@ private:
 	float m_fSpeed;
 
 	// Tank's weapons
-	std::vector<Weapon*> m_vWeapons;
+	std::vector<std::unique_ptr<Weapon>>& m_rvupWeapons;
+
+	// Is tank moving
+	bool m_bIsMoving;
+
+	// Is tank moving back
+	bool m_bIsBackMoving;
 
 	// Tank's texture
 	HTEXTURE m_hTankTex;
@@ -41,6 +47,12 @@ private:
 	// Release all allocated memory
 	void release();
 
+	// Tank moves
+	void move( );
+
+	// Tank stops
+	void stop( );
+
 	// Private copy constructor
 	Tank( const Tank& );
 
@@ -48,11 +60,18 @@ private:
 	Tank& operator = ( const Tank& );
 public:
 	// Constructor
-	Tank( float xPos, float yPos, float health, float armor, float speed, const char* tank );
+	Tank( float xPos, float yPos, float health, float armor, float speed, const char* tank, 
+		std::vector<std::unique_ptr<Weapon>>& weapons, bool isMoving = false, bool isBackMoving = false );
 
 	// Destructor
 	~Tank( );
-	
+
+	// Tank's frame calculations
+	void frame();
+
+	// Render tank
+	void render();
+		
 	// Get current tank's position
 	hgeVector getPosition( ) const;
 
@@ -68,8 +87,14 @@ public:
 	// Get tank's speed 
 	float getSpeed( ) const; 
 
+	// Is tank moving
+	bool isMoving( ) const;
+
+	// Is tank moving back
+	bool isBackMoving( ) const;
+
 	// Get current tank's weapon
-	Weapon* getCurrentWeapon( );
+	std::unique_ptr<Weapon>& getCurrentWeapon( );
 
 	// Set tank's position
 	void setPosition( hgeVector position );
@@ -88,21 +113,18 @@ public:
 
 	// Set tank's speed
 	void setSpeed( float speed );
+
+	// Set tank movement
+	void setMoving( bool moving = true );
+
+	// Set tank back movement
+	void setBackMoving( bool backMoving = true );
 	
 	// Ghange tank's weapon
 	void changeWeapon( bool clockwise = true );
 
-	// Tank stops
-	void stop( );
-
-	// Tank moves
-	void move( );
-
-	// Tank explodes
-	void explode( );
-
 	// Tank turns
-	void turn( bool toTheRight ); 
+	void turn( bool clockwise = true ); 
 };
 
 inline hgeVector Tank::getPosition( ) const
@@ -130,9 +152,19 @@ inline float Tank::getSpeed( ) const
 	return m_fSpeed;
 }
 
-inline Weapon* Tank::getCurrentWeapon( )
+inline bool Tank::isMoving( ) const
 {
-	return m_vWeapons.back( );
+	return m_bIsMoving;
+}
+
+inline bool Tank::isBackMoving( ) const 
+{
+	return m_bIsBackMoving;
+}
+
+inline std::unique_ptr<Weapon>& Tank::getCurrentWeapon( )
+{
+	return m_rvupWeapons.front( );
 }
 
 inline void Tank::setPosition( hgeVector position )
@@ -158,6 +190,16 @@ inline void Tank::setArmor( float armor )
 inline void Tank::setSpeed( float speed )
 {
 	m_fSpeed = speed;
+}
+
+inline void Tank::setMoving( bool moving )
+{
+	m_bIsMoving = moving;
+}
+
+inline void Tank::setBackMoving( bool backMoving )
+{
+	m_bIsBackMoving = backMoving;
 }
 
 #endif
