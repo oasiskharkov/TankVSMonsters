@@ -57,17 +57,27 @@ void Tank::changeWeapon( bool clockwise )
 
 void Tank::frame( ) 
 {
+	hgeVector vTemp;
+	hgeVector vSpeed;
 	if( m_bIsMoving )
 	{
-		hgeVector vSpeed = m_vDir * m_fSpeed;
-		m_vPos += vSpeed * dt;
+		vSpeed = m_vDir * m_fSpeed;
+	
 	}
 	else if( m_bIsBackMoving )
 	{
 		hgeVector vDirBar( m_vDir );
 		vDirBar.Rotate( M_PI );
-		hgeVector vSpeed = vDirBar * m_fSpeed;
-		m_vPos += vSpeed * dt;
+		vSpeed = vDirBar * m_fSpeed;
+	}
+
+	if( m_bIsMoving || m_bIsBackMoving )
+	{
+		vTemp = m_vPos + vSpeed * dt;
+		if( Objects::isObjectOnScreen( vTemp ) )
+		{
+			m_vPos = vTemp; 
+		}			 
 	}
 }
 

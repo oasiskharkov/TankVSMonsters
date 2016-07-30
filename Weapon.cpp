@@ -47,5 +47,10 @@ void Weapon::frame( )
 void Weapon::render( )
 {
 	m_pWeapon->SetHotSpot( 128.0f, 128.0f );
-	m_pWeapon->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2/*Objects::getAngleInRadians( m_vDir.x, m_vDir.y )*/, 0.3f);
+	m_pWeapon->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f);
+}
+
+void Weapon::shot( )
+{
+	return;
 }

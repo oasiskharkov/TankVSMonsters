@@ -1,6 +1,7 @@
 #include "Service.h"
 #include "Objects.h"
 #include "Scene.h"
+#include "Input.h"
 
 HGE* hge = 0;
 Objects* objects = 0;
@@ -17,7 +18,7 @@ bool FrameFunc( )
 	dt = hge->Timer_GetDelta( );
 
 	// Press ESC to exit
-	if ( hge->Input_GetKeyState( HGEK_ESCAPE ) )
+	if ( Input::handleEsc( ) )
 	{
 		return true;
 	}

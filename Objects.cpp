@@ -3,6 +3,7 @@
 #include "Monster.h"
 #include "Weapon.h"
 #include "Packet.h"
+#include "Input.h"
 
 Objects* Objects::instance( 0 );
 
@@ -12,7 +13,7 @@ Objects* Objects::getInstance( )
    return instance;
 }
 
-Objects::Objects( ) : oldWKeyState( true ), oldQKeyState( true )
+Objects::Objects( )
 {
 	m_vupMonsters.resize( 10 );
 	m_vupWeapons.resize( 3 );
@@ -82,45 +83,15 @@ void Objects::frameWeapon( )
 
 void Objects::frameObjects( ) 
 {
-	processInput( );
+	Input::handleTankControlKeys( );
 
 	frameTank( );
 	frameWeapon( );
 }
 
-void Objects::processInput( )
-{	
-	// Handle 'LEFT ARROW' key press
-	if( hge->Input_GetKeyState( HGEK_LEFT ) ) 
-	{
-		m_upTank->turn( false );
-	}
-
-	// Handle 'RIGHT ARROW' key press
-	if( hge->Input_GetKeyState( HGEK_RIGHT ) )
-	{
-		m_upTank->turn( );
-	}
-
-	// Handle 'UP ARROW' key press
-	hge->Input_GetKeyState( HGEK_UP ) ? m_upTank->setMoving( ) : m_upTank->setMoving( false );  
-	
-	// Handle 'DOWN ARROW' key press
-	hge->Input_GetKeyState( HGEK_DOWN ) ? m_upTank->setBackMoving( ) : m_upTank->setBackMoving( false );
-
-	// Handle 'Q' key press
-	if( !oldQKeyState && hge->Input_GetKeyState( HGEK_Q ) )
-	{
-		m_upTank->changeWeapon( false );
-	}
-	oldQKeyState = hge->Input_GetKeyState( HGEK_Q );
-
-	// Handle 'W' key press
-	if( !oldWKeyState && hge->Input_GetKeyState( HGEK_W ) )
-	{
-		m_upTank->changeWeapon( );
-	}
-	oldWKeyState = hge->Input_GetKeyState( HGEK_W );
+bool Objects::isObjectOnScreen( hgeVector center )
+{
+	return !(center.x < 0 || center.x > GAME_WIDTH || center.y < 0 || center.y > GAME_HEIGHT);
 }
 
 float Objects::getAngleInRadians( float vx, float vy )

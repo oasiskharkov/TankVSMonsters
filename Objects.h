@@ -23,12 +23,6 @@ private:
 	// Container with unique pointers to the packets
 	std::vector<std::unique_ptr<Packet>> m_vupPackets;
 
-	// Old 'W' key state
-	bool oldWKeyState;
-
-	// Old 'Q' key state
-	bool oldQKeyState;
-
 	// Render tank
 	void renderTank( );
 	
@@ -52,9 +46,6 @@ private:
 
 	// Packet's frame calculations
 	void framePackets( );
-
-	// Proccess Input
-	void processInput( );
 
 	// Prepare game objects
 	void prepareObjects( );
@@ -94,6 +85,9 @@ public:
 
 	// Get direction in radians
 	static float getAngleInRadians( float vx, float vy );
+	
+	// Check is object on screen
+	static bool isObjectOnScreen( hgeVector center ); 
 };
 
 inline std::unique_ptr<Tank>& Objects::getTank( )
