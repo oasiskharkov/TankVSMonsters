@@ -1,6 +1,7 @@
 #include "Weapon.h"
 #include "Objects.h"
 #include "Tank.h"
+#include "Packet.h"
 
 Weapon::Weapon( weapon_type type, const char* weapon ) : m_eWeaponType( type ), m_pWeapon( 0 ) 
 {
@@ -52,5 +53,19 @@ void Weapon::render( )
 
 void Weapon::shot( )
 {
-	return;
+	Packet* packet;
+	switch( m_eWeaponType )
+	{
+	case weapon_type::MACHINE_GUN:
+		packet = new Packet( packet_type::BULLET );
+		break;
+	case weapon_type::CANNON:
+		packet = new Packet( packet_type::SHELL );
+		break;
+	case weapon_type::ROCKET_LAUNCHER:
+		packet = new Packet( packet_type::ROCKET );
+		break;
+	};
+
+	objects->getPackets( ).push_back(static_cast<std::unique_ptr<Packet>>(packet));
 }

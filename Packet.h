@@ -20,6 +20,9 @@ private:
 
 	// Packet's speed
 	float m_fSpeed;
+
+	// Shift from weapon
+	float m_fShift;
 		
 	// Packet's texture
 	HTEXTURE m_hPacketTex;
@@ -40,11 +43,17 @@ private:
 	Packet& operator = ( const Packet& );
 public:
 	// Constructor
-	Packet( );
+	Packet( packet_type type );
 
 	// Destructor
 	~Packet( );
-			
+
+	// Frame packet
+	void frame( );
+
+	// Render packet
+	void render( );
+		
 	// Get packet's type
 	packet_type getType( ) const;
 

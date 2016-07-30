@@ -98,18 +98,18 @@ void Tank::move( )
 	}
 
 	m_pTankAnimated->SetHotSpot( 128.0f, 128.0f );
-	m_pTankAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2/*Objects::getAngleInRadians( m_vDir.x, m_vDir.y )*/, 0.3f);
+	m_pTankAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f );
 }
 
 void Tank::stop( )
 {
 	m_pTankStopped->SetHotSpot( 128.0f, 128.0f );
-	m_pTankStopped->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2/*Objects::getAngleInRadians( m_vDir.x, m_vDir.y )*/, 0.3f);
+	m_pTankStopped->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f );
 }
 
 void Tank::turn( bool clockwise )
 {
-	float angle = clockwise ? dt * ANGLE_VELOCITY : - dt * ANGLE_VELOCITY;
+	float angle = clockwise ? dt * TANK_ANGLE_VELOCITY : - dt * TANK_ANGLE_VELOCITY;
 	
 	if ( m_bIsBackMoving )
 	{

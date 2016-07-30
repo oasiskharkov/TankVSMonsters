@@ -39,7 +39,7 @@ void Objects::prepareObjects( )
 		m_vupWeapons.at( 1 ).reset( new Weapon( weapon_type::CANNON, "Resources\\tower2.png" ) );
 		m_vupWeapons.at( 2 ).reset( new Weapon( weapon_type::ROCKET_LAUNCHER, "Resources\\tower3.png" ) );
 
-		m_upTank.reset( new Tank( GAME_WIDTH / 2.0f, GAME_HEIGHT / 2.0f, 1.0f, 1.0f, 50.0f,
+		m_upTank.reset( new Tank( GAME_WIDTH / 2.0f, GAME_HEIGHT / 2.0f, 1.0f, 1.0f, TANK_SPEED,
 			"Resources\\tank.png", m_vupWeapons ) );
 
 	}
@@ -65,10 +65,19 @@ void Objects::renderWeapon( )
 	m_upTank->getCurrentWeapon( )->render( );
 }
 
+void Objects::renderPackets( )
+{
+	for(size_t i = 0; i < m_vupPackets.size( ); i++ )
+	{
+		m_vupPackets[i]->render( );
+	}
+}
+
 void Objects::renderObjects( )
 {
 	renderTank( );
 	renderWeapon( );
+	renderPackets( );
 }
 
 void Objects::frameTank( )
@@ -81,12 +90,32 @@ void Objects::frameWeapon( )
 	m_upTank->getCurrentWeapon( )->frame( );
 }
 
+void Objects::framePackets( )
+{
+	auto packet = m_vupPackets.begin( );
+	while( packet != m_vupPackets.end( ) )
+	{
+		if( !isObjectOnScreen( (*packet)->getPosition( ) ) )
+		{
+			( *packet ).reset( nullptr );
+			packet = m_vupPackets.erase( packet );
+			if( packet == m_vupPackets.end( ) )
+			{
+				break;
+			}
+		}
+		( *packet )->frame( );
+		packet++;
+	}
+}
+
 void Objects::frameObjects( ) 
 {
 	Input::handleTankControlKeys( );
 
 	frameTank( );
 	frameWeapon( );
+	framePackets( );
 }
 
 bool Objects::isObjectOnScreen( hgeVector center )
