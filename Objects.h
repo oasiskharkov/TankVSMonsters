@@ -47,6 +47,21 @@ private:
 	// Packet's frame calculations
 	void framePackets( );
 
+	// Create monsters
+	void createMonsters( );
+
+	// Process monster and other monster collision
+	void processMonsterVsMonsterCollision( );
+
+	// Process monster and packet collision
+	void processMonsterVsPacketCollision( );
+
+	// Process monster and tank collision
+	void processMonsterVsTankCollision( );
+
+	// Process objects collisions
+	void processCollisions( );
+
 	// Prepare game objects
 	void prepareObjects( );
 
@@ -83,11 +98,11 @@ public:
 	// Get container with unique pointers to the packets
 	std::vector<std::unique_ptr<Packet>>& getPackets( );
 
-	// Get direction in radians
-	static float getAngleInRadians( float vx, float vy );
-	
 	// Check is object on screen
-	static bool isObjectOnScreen( hgeVector center ); 
+	static bool isObjectOnScreen( const hgeVector& center ); 
+
+	// Calculate distance between two points
+	static float distanceBetweenPoints( const hgeVector& v1, const hgeVector& v2 ); 
 };
 
 inline std::unique_ptr<Tank>& Objects::getTank( )

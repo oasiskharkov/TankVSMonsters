@@ -67,5 +67,5 @@ void Weapon::shot( )
 		break;
 	};
 
-	objects->getPackets( ).push_back(static_cast<std::unique_ptr<Packet>>(packet));
+	objects->getPackets( ).push_back( static_cast<std::unique_ptr<Packet>>( packet ) );
 }

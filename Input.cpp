@@ -27,12 +27,14 @@ void Input::handleRightArrow( )
 
 void Input::handleUpArrow( )
 {
-	hge->Input_GetKeyState( HGEK_UP ) ? objects->getTank( )->setMoving( ) : objects->getTank( )->setMoving( false );  
+	hge->Input_GetKeyState( HGEK_UP ) ? objects->getTank( )->setMoving( ) 
+		: objects->getTank( )->setMoving( false );  
 }
 
 void Input::handleDownArrow( )
 {
-	hge->Input_GetKeyState( HGEK_DOWN ) ? objects->getTank( )->setBackMoving( ) : objects->getTank( )->setBackMoving( false );
+	hge->Input_GetKeyState( HGEK_DOWN ) ? objects->getTank( )->setBackMoving( ) 
+		: objects->getTank( )->setBackMoving( false );
 }
 
 void Input::handleQ( )

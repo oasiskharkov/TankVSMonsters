@@ -15,7 +15,6 @@ Objects* Objects::getInstance( )
 
 Objects::Objects( )
 {
-	m_vupMonsters.resize( 10 );
 	m_vupWeapons.resize( 3 );
 
 	prepareObjects( );
@@ -73,10 +72,19 @@ void Objects::renderPackets( )
 	}
 }
 
+void Objects::renderMonsters( )
+{
+	for(size_t i = 0; i < m_vupMonsters.size( ); i++ )
+	{
+		m_vupMonsters[ i ]->render( );
+	}
+}
+
 void Objects::renderObjects( )
 {
 	renderTank( );
 	renderWeapon( );
+	renderMonsters( ); 
 	renderPackets( );
 }
 
@@ -90,12 +98,33 @@ void Objects::frameWeapon( )
 	m_upTank->getCurrentWeapon( )->frame( );
 }
 
+void Objects::frameMonsters( )
+{
+	createMonsters( );
+
+	auto monster = m_vupMonsters.begin( );
+	while( monster != m_vupMonsters.end( ) )
+	{
+		if( ( *monster )->getHealth( ) <= 0.0f )
+		{
+			( *monster ).reset( nullptr );
+			monster = m_vupMonsters.erase( monster );
+			if( monster == m_vupMonsters.end( ) )
+			{
+				break;
+			}
+		}
+		( *monster )->frame( );
+		monster++;
+	}
+}
+
 void Objects::framePackets( )
 {
 	auto packet = m_vupPackets.begin( );
 	while( packet != m_vupPackets.end( ) )
 	{
-		if( !isObjectOnScreen( (*packet)->getPosition( ) ) )
+		if( !isObjectOnScreen( ( *packet )->getPosition( ) ) )
 		{
 			( *packet ).reset( nullptr );
 			packet = m_vupPackets.erase( packet );
@@ -113,34 +142,113 @@ void Objects::frameObjects( )
 {
 	Input::handleTankControlKeys( );
 
+	processCollisions( );
+
 	frameTank( );
 	frameWeapon( );
+	frameMonsters( );
 	framePackets( );
 }
 
-bool Objects::isObjectOnScreen( hgeVector center )
+void Objects::processMonsterVsMonsterCollision( )
 {
-	return !(center.x < 0 || center.x > GAME_WIDTH || center.y < 0 || center.y > GAME_HEIGHT);
+
 }
 
-float Objects::getAngleInRadians( float vx, float vy )
+void Objects::processMonsterVsPacketCollision( )
 {
-	if( vx >= 0.0f && vy < 0.0f )
+	auto monster = m_vupMonsters.begin( );
+	while( monster != m_vupMonsters.end( ) )
 	{
-		return atan( vx / -vy );
-	}
-	else if( vx >= 0 && vy >= 0 )
-	{
-		return M_PI - atan( vx / vy );
-	}
-	else if( vx < 0 && vy >= 0 )
-	{
-		return M_PI + atan( -vx / vy );
-	}
-	else
-	{
-		return 2 * M_PI - atan ( vx / vy );
+		hgeVector monsterPos = ( *monster )->getPosition( );
+		auto packet = m_vupPackets.begin( );
+		while( packet != m_vupPackets.end( ) )
+		{
+			hgeVector packetPos = ( *packet )->getPosition( );
+			if( distanceBetweenPoints( monsterPos, packetPos ) < PACKET_MONSTER_SHIFT )
+			{
+				float monsterHealth = ( *monster )->getHealth( );
+				( *monster )->setHealth( monsterHealth - ( *monster )->getArmor( ) * ( *packet )->getDamage( ) );
+				( *packet ).reset( nullptr );
+				packet = m_vupPackets.erase( packet );
+				if( packet == m_vupPackets.end( ) )
+				{
+					break;
+				}
+			}
+			packet++;
+		}
+		monster++;
 	}
 }
 
+void Objects::processMonsterVsTankCollision( )
+{
 
+}
+
+void Objects::processCollisions( )
+{
+	processMonsterVsMonsterCollision( );
+	processMonsterVsPacketCollision( );
+	processMonsterVsTankCollision( );
+}
+
+void Objects::createMonsters( )
+{
+	while( m_vupMonsters.size( ) < MAX_MONSTER_COUNT )
+	{
+		float x, y;
+		int choicePos = hge->Random_Int( 1, 4 );
+		int choiceType = hge->Random_Int( 1, 3 ); 
+
+		switch( choicePos )
+		{
+		case 1:
+			x = -50.0f;
+			y = hge->Random_Float( 0.0f, static_cast<float>( GAME_HEIGHT ) );
+			break;
+		case 2:
+			x = static_cast<float>( GAME_WIDTH ) + 50.0f;
+			y = hge->Random_Float( 0.0f, static_cast<float>( GAME_HEIGHT ) );
+			break;
+		case 3:
+			x = hge->Random_Float( 0.0f, static_cast<float>( GAME_WIDTH ) );
+			y = -50.0f;
+			break;
+		case 4:
+			x = hge->Random_Float( 0.0f, static_cast<float>( GAME_WIDTH ) );
+			y = static_cast<float>( GAME_HEIGHT ) + 50.0f;
+			break;
+		}
+
+		switch( choiceType )
+		{
+		case 1:
+			m_vupMonsters.push_back(static_cast<std::unique_ptr<Monster>>(
+				new Monster( monster_type::BEAST, x, y, BEAST_HEALTH, 
+					BEAST_ARMOR, BEAST_DAMAGE, BEAST_SPEED, "Resources\\beast.png" ) ) );
+			break;
+		case 2:
+			m_vupMonsters.push_back(static_cast<std::unique_ptr<Monster>>(
+				new Monster( monster_type::DAEMON, x, y, DAEMON_HEALTH, 
+					DAEMON_ARMOR, DAEMON_DAMAGE, DAEMON_SPEED, "Resources\\daemon.png" ) ) );
+			break;
+		case 3:
+			m_vupMonsters.push_back(static_cast<std::unique_ptr<Monster>>(
+				new Monster( monster_type::REPTILE, x, y, REPTILE_HEALTH, 
+					REPTILE_ARMOR, REPTILE_DAMAGE, REPTILE_SPEED, "Resources\\reptile.png" ) ) );
+			break;
+		}
+	}
+}
+
+float Objects::distanceBetweenPoints( const hgeVector& v1, const hgeVector& v2 )
+{
+	return sqrt( ( v2.x - v1.x ) * ( v2.x - v1.x ) + ( v2.y - v1.y ) * ( v2.y - v1.y ) ); 
+}
+
+bool Objects::isObjectOnScreen( const hgeVector& center )
+{
+	return !( center.x < 0 || center.x > GAME_WIDTH || center.y < 0 || center.y > GAME_HEIGHT );
+}

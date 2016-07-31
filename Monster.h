@@ -27,6 +27,9 @@ private:
 	// Monster's speed
 	float m_fSpeed;
 
+	// Time interval to recalculate direction
+	float m_fDeltaTime;
+
 	// Monster's texture
 	HTEXTURE m_hMonsterTex;
 	
@@ -35,6 +38,9 @@ private:
 
 	// Monster's stopped sprite
 	hgeSprite* m_pMonsterStopped;
+
+	// Recalculate montster direction
+	void recalculateDirection( );
 
 	// Prepeare monster's resources
 	bool prepareResources( );
@@ -57,7 +63,11 @@ public:
 
 	// Destructor
 	virtual ~Monster( );
-		
+	
+	void frame( );
+
+	void render( );
+
 	// Get monster's type
 	monster_type getType( ) const;
 
