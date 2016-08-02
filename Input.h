@@ -41,6 +41,9 @@ public:
 
 	// Handle 'Esc' key
 	static bool handleEsc( );
+
+	// Handle 'Enter' key
+	static bool handleEnter( );
 };
 
 #endif

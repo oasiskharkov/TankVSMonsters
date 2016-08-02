@@ -3,6 +3,12 @@
 #include "Tank.h"
 #include "Packet.h"
 
+int Weapon::s_nBullets( 0 );
+
+int Weapon::s_nShells( 0 );
+
+int Weapon::s_nRockets( 0 );
+
 Weapon::Weapon( weapon_type type, const char* weapon ) : m_eWeaponType( type ), m_pWeapon( 0 ) 
 {
 	m_hWeaponTex = hge->Texture_Load( weapon );
@@ -57,12 +63,15 @@ void Weapon::shot( )
 	switch( m_eWeaponType )
 	{
 	case weapon_type::MACHINE_GUN:
+		s_nBullets++;
 		packet = new Packet( packet_type::BULLET );
 		break;
 	case weapon_type::CANNON:
+		s_nShells++;
 		packet = new Packet( packet_type::SHELL );
 		break;
 	case weapon_type::ROCKET_LAUNCHER:
+		s_nRockets++;
 		packet = new Packet( packet_type::ROCKET );
 		break;
 	};

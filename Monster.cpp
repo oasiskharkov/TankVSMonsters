@@ -46,7 +46,7 @@ void Monster::release( )
 void Monster::frame( ) 
 {
 	m_fDeltaTime += dt;
-	if( m_fDeltaTime >= 3.0f )
+	if( m_fDeltaTime >= 2.0f )
 	{
 		recalculateDirection( );
 		m_fDeltaTime = 0.0f;

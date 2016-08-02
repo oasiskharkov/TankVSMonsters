@@ -9,13 +9,18 @@ Objects* Objects::instance( 0 );
 
 Objects* Objects::getInstance( )
 {
-   static Objects* instance = new Objects( );
-   return instance;
+   if( instance == 0 )
+	{
+		instance = new Objects( );
+	}
+	return instance;
 }
 
-Objects::Objects( )
+Objects::Objects( ) : m_nDeadBeast( 0 ), m_nDeadDaemon( 0 ), m_nDeadReptile( 0 ) 
 {
 	m_vupWeapons.resize( 3 );
+
+	Weapon::resetTotalPacketsQuantity( );
 
 	prepareObjects( );
 }
@@ -38,7 +43,7 @@ void Objects::prepareObjects( )
 		m_vupWeapons.at( 1 ).reset( new Weapon( weapon_type::CANNON, "Resources\\tower2.png" ) );
 		m_vupWeapons.at( 2 ).reset( new Weapon( weapon_type::ROCKET_LAUNCHER, "Resources\\tower3.png" ) );
 
-		m_upTank.reset( new Tank( GAME_WIDTH / 2.0f, GAME_HEIGHT / 2.0f, 1.0f, 1.0f, TANK_SPEED,
+		m_upTank.reset( new Tank( GAME_WIDTH / 2.0f, GAME_HEIGHT / 2.0f, TANK_HEALTH, TANK_ARMOR, TANK_SPEED,
 			"Resources\\tank.png", m_vupWeapons ) );
 
 	}
@@ -105,15 +110,6 @@ void Objects::frameMonsters( )
 	auto monster = m_vupMonsters.begin( );
 	while( monster != m_vupMonsters.end( ) )
 	{
-		if( ( *monster )->getHealth( ) <= 0.0f )
-		{
-			( *monster ).reset( nullptr );
-			monster = m_vupMonsters.erase( monster );
-			if( monster == m_vupMonsters.end( ) )
-			{
-				break;
-			}
-		}
 		( *monster )->frame( );
 		monster++;
 	}
@@ -152,7 +148,29 @@ void Objects::frameObjects( )
 
 void Objects::processMonsterVsMonsterCollision( )
 {
+	/*for( size_t i = 0; i < m_vupMonsters.size( ); i++ )
+	{
+		hgeVector monsterPos = m_vupMonsters[ i ]->getPosition( );  
+		float monsterAngle = m_vupMonsters[ i ]->getDirection( ).Angle( );
+		for( size_t j = 0; j < m_vupMonsters.size( );  j++ )
+		{
+			if( j != i )
+			{
+				hgeVector currentMonsterPos = m_vupMonsters[ j ]->getPosition( );
+				float currentMonsterAngle = m_vupMonsters[ j ]->getDirection( ).Angle( );
+				if( distanceBetweenPoints( monsterPos, currentMonsterPos ) < MONSTER_RADIUS + MONSTER_RADIUS ) 
+				{
+					hgeVector* dir = m_vupMonsters[ i ]->getDirection( ).Rotate( -2 * monsterAngle );
 
+					m_vupMonsters[ i ]->setDirection( *dir ); 
+
+					hgeVector* curDir = m_vupMonsters[ j ]->getDirection( ).Rotate( -2 * currentMonsterAngle );
+
+					m_vupMonsters[ j ]->setDirection( *curDir ); 
+				}
+			}
+		}
+	}*/
 }
 
 void Objects::processMonsterVsPacketCollision( )
@@ -165,7 +183,7 @@ void Objects::processMonsterVsPacketCollision( )
 		while( packet != m_vupPackets.end( ) )
 		{
 			hgeVector packetPos = ( *packet )->getPosition( );
-			if( distanceBetweenPoints( monsterPos, packetPos ) < PACKET_MONSTER_SHIFT )
+			if( distanceBetweenPoints( monsterPos, packetPos ) < MONSTER_RADIUS + PACKET_RADIUS )
 			{
 				float monsterHealth = ( *monster )->getHealth( );
 				( *monster )->setHealth( monsterHealth - ( *monster )->getArmor( ) * ( *packet )->getDamage( ) );
@@ -178,13 +196,44 @@ void Objects::processMonsterVsPacketCollision( )
 			}
 			packet++;
 		}
-		monster++;
+		if( ( *monster )->getHealth( ) <= 0.0f )
+		{
+			countDeadMonsters( ( *monster )->getType( ) );
+			monster = m_vupMonsters.erase( monster );
+			if( monster == m_vupMonsters.end( ) )
+			{
+					break;
+			}
+		}
+		else
+		{
+			monster++;
+		}
 	}
 }
 
 void Objects::processMonsterVsTankCollision( )
 {
+	auto monster = m_vupMonsters.begin( );
+	hgeVector tankPos = m_upTank->getPosition( );
 
+	while( monster != m_vupMonsters.end( ) )
+	{
+		hgeVector monsterPos = ( *monster )->getPosition( );
+		
+		if( distanceBetweenPoints( monsterPos, tankPos ) < TANK_RADIUS + MONSTER_RADIUS )
+		{
+			float tankHealth = m_upTank->getHealth( );
+			m_upTank->setHealth( tankHealth - m_upTank->getArmor( ) * ( *monster )->getDamage( ) );
+			( *monster )->setPosition( monsterPos - 10.0f * ( *monster )->getDirection( ) );
+			if( m_upTank->getHealth( ) < 0.0f )
+			{
+				attempts--;
+				return;
+			}
+		}
+		monster++;
+	}
 }
 
 void Objects::processCollisions( )
@@ -251,4 +300,20 @@ float Objects::distanceBetweenPoints( const hgeVector& v1, const hgeVector& v2 )
 bool Objects::isObjectOnScreen( const hgeVector& center )
 {
 	return !( center.x < 0 || center.x > GAME_WIDTH || center.y < 0 || center.y > GAME_HEIGHT );
+}
+
+void Objects::countDeadMonsters( monster_type type ) 
+{
+	switch ( type )
+	{
+	case monster_type::BEAST:
+		m_nDeadBeast++;
+		break;
+	case monster_type::DAEMON:
+		m_nDeadDaemon++;
+		break;
+	case monster_type::REPTILE:
+		m_nDeadReptile++;
+		break;
+	}
 }

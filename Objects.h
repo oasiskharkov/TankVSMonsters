@@ -23,6 +23,15 @@ private:
 	// Container with unique pointers to the packets
 	std::vector<std::unique_ptr<Packet>> m_vupPackets;
 
+	// Dead beast quantity
+	int m_nDeadBeast;
+
+	// Dead daemon quantity
+	int m_nDeadDaemon;
+
+	// Dead reptile quantity
+	int m_nDeadReptile;
+
 	// Render tank
 	void renderTank( );
 	
@@ -61,6 +70,9 @@ private:
 
 	// Process objects collisions
 	void processCollisions( );
+
+	// Count dead monsters
+	void countDeadMonsters( monster_type type);
 
 	// Prepare game objects
 	void prepareObjects( );
@@ -102,7 +114,17 @@ public:
 	static bool isObjectOnScreen( const hgeVector& center ); 
 
 	// Calculate distance between two points
-	static float distanceBetweenPoints( const hgeVector& v1, const hgeVector& v2 ); 
+	static float distanceBetweenPoints( const hgeVector& v1, const hgeVector& v2 );
+
+	// Get dead beast quantity
+	int getDeadBeastQuantity( ) const;
+
+	// Get dead daemon quantity
+	int getDeadDaemonQuantity( ) const;
+
+	// Get dead reptile quantity
+	int getDeadReptileQuantity( ) const;
+
 };
 
 inline std::unique_ptr<Tank>& Objects::getTank( )
@@ -123,6 +145,21 @@ inline std::vector<std::unique_ptr<Weapon>>& Objects::getWeapons( )
 inline std::vector<std::unique_ptr<Packet>>& Objects::getPackets( )
 {
 	return m_vupPackets;
+}
+
+inline int Objects::getDeadBeastQuantity( ) const
+{
+	return m_nDeadBeast;
+}
+
+inline int Objects::getDeadDaemonQuantity( ) const
+{
+	return m_nDeadDaemon;
+}
+
+inline int Objects::getDeadReptileQuantity( ) const
+{
+	return m_nDeadReptile;
 }
 
 #endif

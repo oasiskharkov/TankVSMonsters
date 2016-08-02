@@ -15,8 +15,14 @@ private:
 	// Weapon's direction
 	hgeVector m_vDir;
 
-	// The number of packets
-	int m_nNumberOfPackets;
+	// Bullets quantity
+	static int s_nBullets;
+
+	// Shells quantity 
+	static int s_nShells;
+	
+	// Rockets quantity
+	static int s_nRockets;
 
 	// Weapon's texture
 	HTEXTURE m_hWeaponTex;
@@ -57,11 +63,23 @@ public:
 	// Get weapon's direction
 	hgeVector getDirection( ) const;
 
+	// Get total bullets quantity
+	static int getBulletsQuantity( );
+
+	// Get total shells quantity
+	static int getShellsQuantity( );
+
+	// Get total rockets quantity
+	static int getRocketsQuantity( );
+
 	// Set weapon's position
 	void setPosition( hgeVector position );
 
 	// Set weapon's direction
 	void setDirection( hgeVector direction );
+
+	// Reset total packets quantity to nil
+	static void resetTotalPacketsQuantity( );
 };
 
 inline hgeVector Weapon::getPosition( ) const
@@ -83,6 +101,27 @@ inline void Weapon::setDirection( hgeVector direction )
 {
 	m_vDir = direction;
 }
+
+inline int Weapon::getBulletsQuantity( )
+{
+	return s_nBullets;
+}
+
+inline int Weapon::getShellsQuantity( )
+{
+	return s_nShells;
+}
+
+inline int Weapon::getRocketsQuantity( )
+{
+	return s_nRockets;
+}
+
+inline void Weapon::resetTotalPacketsQuantity( )
+{
+	s_nBullets = s_nShells = s_nRockets = 0;
+}
+
 
 #endif 
 

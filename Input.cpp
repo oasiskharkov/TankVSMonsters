@@ -77,7 +77,12 @@ void Input::handleTankControlKeys( )
 
 bool Input::handleEsc( )
 {
-	 return hge->Input_GetKeyState( HGEK_ESCAPE );
+	return hge->Input_GetKeyState( HGEK_ESCAPE );
+}
+
+bool Input::handleEnter( )
+{
+	return hge->Input_GetKeyState( HGEK_ENTER );
 }
 
 	

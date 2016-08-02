@@ -5,6 +5,7 @@
 #include "hgesprite.h"
 #include "hgeanim.h"
 #include "hgevector.h"
+#include "hgeFont.h"
 #include <vector>
 #include <cmath>
 #include <algorithm>
@@ -19,7 +20,7 @@ class Scene;
 extern HGE* hge ;
 extern Objects* objects;
 extern Scene* scene;
-extern unsigned short lives;
+extern unsigned short attempts;
 extern float dt;
 
 // enumerations
@@ -34,14 +35,17 @@ const int GAME_WIDTH = 1024;
 const int GAME_HEIGHT = 768;
 
 const float TILE_STEP = 32.0f;
+const int MAX_MONSTER_COUNT = 10;
+const float SURVIVAL_TIME = 300.0f;
 
 const float TANK_ANGLE_VELOCITY = 1.0f;
-const float TANK_SPEED = 50.0f;
-const float TANK_ARMOR = 0.0f;
+const float TANK_SPEED = 100.0f;
+const float TANK_ARMOR = 0.1f;
+const float TANK_HEALTH = 1.0f;
 
-const float BULLET_SPEED = 300.0f;
-const float SHELL_SPEED = 200.0f;
-const float ROCKET_SPEED = 100.0f;
+const float BULLET_SPEED = 350.0f;
+const float SHELL_SPEED = 250.0f;
+const float ROCKET_SPEED = 150.0f;
 
 const float BULLET_DAMAGE = 0.2f;
 const float SHELL_DAMAGE = 0.5f;
@@ -59,16 +63,16 @@ const float BEAST_ARMOR = 0.9f;
 const float DAEMON_ARMOR = 0.6f;
 const float REPTILE_ARMOR = 0.3f;
 
-const float BEAST_DAMAGE = 0.3f;
-const float DAEMON_DAMAGE = 0.6f;
-const float REPTILE_DAMAGE = 0.9f;
+const float BEAST_DAMAGE = 0.2f;
+const float DAEMON_DAMAGE = 0.5f;
+const float REPTILE_DAMAGE = 0.8f;
 
 const float BEAST_SPEED = 80.0f;
 const float DAEMON_SPEED = 60.0f;
 const float REPTILE_SPEED = 40.0f;
 
-const float PACKET_MONSTER_SHIFT = 5.0f;
-
-const int MAX_MONSTER_COUNT = 10;
+const float TANK_RADIUS = 31.0f;
+const float MONSTER_RADIUS = 16.0f;
+const float PACKET_RADIUS = 10.0f;
 
 #endif
