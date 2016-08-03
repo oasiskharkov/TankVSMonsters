@@ -53,8 +53,15 @@ void Weapon::frame( )
 
 void Weapon::render( )
 {
-	m_pWeapon->SetHotSpot( 128.0f, 128.0f );
-	m_pWeapon->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f);
+	if ( m_pWeapon != nullptr )
+	{
+		m_pWeapon->SetHotSpot( 128.0f, 128.0f );
+		m_pWeapon->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f);
+	}
+	else
+	{
+		throw game_errors::NULL_POINTER;
+	}
 }
 
 void Weapon::shot( )
@@ -64,15 +71,15 @@ void Weapon::shot( )
 	{
 	case weapon_type::MACHINE_GUN:
 		s_nBullets++;
-		packet = new Packet( packet_type::BULLET );
+		packet = new Packet( packet_type::BULLET, BULLET_DAMAGE, BULLET_SPEED, BULLET_SHIFT, "Resources\\bullet.png" );
 		break;
 	case weapon_type::CANNON:
 		s_nShells++;
-		packet = new Packet( packet_type::SHELL );
+		packet = new Packet( packet_type::SHELL, SHELL_DAMAGE, SHELL_SPEED, SHELL_SHIFT, "Resources\\shell.png" );
 		break;
 	case weapon_type::ROCKET_LAUNCHER:
 		s_nRockets++;
-		packet = new Packet( packet_type::ROCKET );
+		packet = new Packet( packet_type::ROCKET, ROCKET_DAMAGE, ROCKET_SPEED, ROCKET_SHIFT, "Resources\\rocket.png" );
 		break;
 	};
 

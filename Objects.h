@@ -59,9 +59,6 @@ private:
 	// Create monsters
 	void createMonsters( );
 
-	// Process monster and other monster collision
-	void processMonsterVsMonsterCollision( );
-
 	// Process monster and packet collision
 	void processMonsterVsPacketCollision( );
 
@@ -71,14 +68,17 @@ private:
 	// Process objects collisions
 	void processCollisions( );
 
+	// Check neighbour monster presense
+	bool checkNeighbourMonsterPresense( const hgeVector& pos );
+
 	// Count dead monsters
-	void countDeadMonsters( monster_type type);
+	void countDeadMonsters( monster_type type );
 
 	// Prepare game objects
 	void prepareObjects( );
 
 	// Release all allocated memory
-	void release();
+	void release( );
 
 	// Private constructor
 	Objects( );
@@ -115,7 +115,7 @@ public:
 
 	// Calculate distance between two points
 	static float distanceBetweenPoints( const hgeVector& v1, const hgeVector& v2 );
-
+	
 	// Get dead beast quantity
 	int getDeadBeastQuantity( ) const;
 
@@ -124,7 +124,6 @@ public:
 
 	// Get dead reptile quantity
 	int getDeadReptileQuantity( ) const;
-
 };
 
 inline std::unique_ptr<Tank>& Objects::getTank( )

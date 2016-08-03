@@ -25,7 +25,7 @@ bool Tank::prepareResources( )
 {
 	try
 	{
-		m_pTankAnimated = new hgeAnimation( m_hTankTex, 3, 10.0f, 0.0f, 0.0f, 256.0f, 256.0f ); 
+		m_pTankAnimated = new hgeAnimation( m_hTankTex, 3, 3.0f, 0.0f, 0.0f, 256.0f, 256.0f ); 
 		m_pTankStopped = new hgeSprite( m_hTankTex, 0.0f, 0.0f, 256.0f, 256.0f );
 	}
 	catch(...)
@@ -88,23 +88,37 @@ void Tank::render( )
 
 void Tank::move( )
 {
-	if( !m_pTankAnimated->IsPlaying( ) )
+	if( m_pTankAnimated != nullptr )
 	{
-		m_pTankAnimated->Play( );
+		if( !m_pTankAnimated->IsPlaying( ) )
+		{
+			m_pTankAnimated->Play( );
+		}
+		else
+		{
+			m_pTankAnimated->Update( dt );
+		}
+
+		m_pTankAnimated->SetHotSpot( 128.0f, 128.0f );
+		m_pTankAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f );
 	}
 	else
 	{
-		m_pTankAnimated->Update( dt );
+		throw game_errors::NULL_POINTER;
 	}
-
-	m_pTankAnimated->SetHotSpot( 128.0f, 128.0f );
-	m_pTankAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f );
 }
 
 void Tank::stop( )
 {
-	m_pTankStopped->SetHotSpot( 128.0f, 128.0f );
-	m_pTankStopped->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f );
+	if( m_pTankStopped != nullptr ) 
+	{
+		m_pTankStopped->SetHotSpot( 128.0f, 128.0f );
+		m_pTankStopped->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.3f );
+	}
+	else
+	{
+		throw game_errors::NULL_POINTER;
+	}
 }
 
 void Tank::turn( bool clockwise )

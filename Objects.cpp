@@ -146,33 +146,6 @@ void Objects::frameObjects( )
 	framePackets( );
 }
 
-void Objects::processMonsterVsMonsterCollision( )
-{
-	/*for( size_t i = 0; i < m_vupMonsters.size( ); i++ )
-	{
-		hgeVector monsterPos = m_vupMonsters[ i ]->getPosition( );  
-		float monsterAngle = m_vupMonsters[ i ]->getDirection( ).Angle( );
-		for( size_t j = 0; j < m_vupMonsters.size( );  j++ )
-		{
-			if( j != i )
-			{
-				hgeVector currentMonsterPos = m_vupMonsters[ j ]->getPosition( );
-				float currentMonsterAngle = m_vupMonsters[ j ]->getDirection( ).Angle( );
-				if( distanceBetweenPoints( monsterPos, currentMonsterPos ) < MONSTER_RADIUS + MONSTER_RADIUS ) 
-				{
-					hgeVector* dir = m_vupMonsters[ i ]->getDirection( ).Rotate( -2 * monsterAngle );
-
-					m_vupMonsters[ i ]->setDirection( *dir ); 
-
-					hgeVector* curDir = m_vupMonsters[ j ]->getDirection( ).Rotate( -2 * currentMonsterAngle );
-
-					m_vupMonsters[ j ]->setDirection( *curDir ); 
-				}
-			}
-		}
-	}*/
-}
-
 void Objects::processMonsterVsPacketCollision( )
 {
 	auto monster = m_vupMonsters.begin( );
@@ -238,7 +211,6 @@ void Objects::processMonsterVsTankCollision( )
 
 void Objects::processCollisions( )
 {
-	processMonsterVsMonsterCollision( );
 	processMonsterVsPacketCollision( );
 	processMonsterVsTankCollision( );
 }
@@ -269,6 +241,12 @@ void Objects::createMonsters( )
 			x = hge->Random_Float( 0.0f, static_cast<float>( GAME_WIDTH ) );
 			y = static_cast<float>( GAME_HEIGHT ) + 50.0f;
 			break;
+		}
+
+		hgeVector pos( x, y );
+		if( checkNeighbourMonsterPresense( pos ) ) 
+		{
+			continue;
 		}
 
 		switch( choiceType )
@@ -316,4 +294,17 @@ void Objects::countDeadMonsters( monster_type type )
 		m_nDeadReptile++;
 		break;
 	}
+}
+
+bool Objects::checkNeighbourMonsterPresense( const hgeVector& pos )
+{
+	for(size_t i = 0; i < m_vupMonsters.size( ); i++ )
+	{
+		hgeVector monsterPos = m_vupMonsters[ i ]->getPosition( );
+		if( distanceBetweenPoints( pos, monsterPos ) < 2 * MONSTER_RADIUS )
+		{
+			return true;
+		}
+	}
+	return false;
 }

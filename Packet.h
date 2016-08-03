@@ -31,10 +31,10 @@ private:
 	hgeAnimation* m_pPacketAnimated;
 
 	// Prepeare packet's resources
-	bool prepareResources();
+	bool prepareResources( );
 
 	// Release all allocated memory
-	void release();
+	void release( );
 
 	// Private copy constructor
 	Packet( const Packet& );
@@ -43,7 +43,7 @@ private:
 	Packet& operator = ( const Packet& );
 public:
 	// Constructor
-	Packet( packet_type type );
+	Packet( packet_type type, float damage, float speed, float shift, const char* packet );
 
 	// Destructor
 	~Packet( );

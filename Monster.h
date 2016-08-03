@@ -42,6 +42,9 @@ private:
 	// Recalculate montster direction
 	void recalculateDirection( );
 
+	// Check collision with another monster
+	bool checkCollisionWithAnotherMonster( const hgeVector& pos ); 
+
 	// Prepeare monster's resources
 	bool prepareResources( );
 
@@ -64,8 +67,10 @@ public:
 	// Destructor
 	virtual ~Monster( );
 	
+	// Monster frame calculations
 	void frame( );
 
+	// Render monster
 	void render( );
 
 	// Get monster's type

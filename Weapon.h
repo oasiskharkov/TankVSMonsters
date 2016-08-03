@@ -31,10 +31,10 @@ private:
 	hgeSprite* m_pWeapon;
 
 	// Prepeare weapon's resources
-	bool prepareResources();
+	bool prepareResources( );
 
 	// Release all allocated memory
-	void release();
+	void release( );
 
 	// Private copy constructor
 	Weapon( const Weapon& );

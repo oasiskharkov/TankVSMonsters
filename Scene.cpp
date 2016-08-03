@@ -18,8 +18,8 @@ Scene::Scene( ) : m_fTimer( 0.0f )
 {
 	h_backgroundTex = hge->Texture_Load( "Resources\\background.png" );
 
-	// If one of the source files is not found, free all field sources and throw an error message.
-	if( !prepareSources( ) || !m_upBackground.get( )  || !m_upFont.get( ) )
+	// If one of the source files is not found, free all scene sources and throw an error message.
+	if( !prepareSources( ) || !m_upBackground.get( ) || !m_upFont.get( ) )
 	{
 		release( );
 		throw game_errors::LOAD_SCENE_SOURCES;
@@ -79,7 +79,6 @@ void Scene::renderFont( int a, int r, int g, int b, float scale, float x, float 
 	m_upFont->Render( x, y, align, str.c_str( ) ); 
 }
 
-
 void Scene::renderGameStatistics()
 {
 	// Show intro
@@ -88,6 +87,7 @@ void Scene::renderGameStatistics()
 		scene->renderFont( 255, 0, 255, 0, 3.0f, GAME_WIDTH / 2.0f, 30.0f, HGETEXT_CENTER, "-=SURVIVAL=-" ); 
 	}
 
+	// Show statistics
 	std::string atp( "attempts: " );
 	atp += std::to_string( attempts ); 
 	renderFont( 255, 128, 128, 128, 1.0f, GAME_WIDTH - 140.0f, 10.0f, HGETEXT_LEFT, atp );
@@ -98,7 +98,7 @@ void Scene::renderGameStatistics()
 	renderFont( 255, 128, 128, 128, 1.0f, GAME_WIDTH - 140.0f, 40.0f, HGETEXT_LEFT, str );
 
 	std::string timer( "timer: "); 
-	timer += std::to_string( static_cast<int>(m_fTimer) );
+	timer += std::to_string( static_cast<int>(SURVIVAL_TIME) - static_cast<int>(m_fTimer) );
 	timer += "s";
 	renderFont( 255, 128, 128, 128, 1.0f, GAME_WIDTH - 140.0f, 70.0f, HGETEXT_LEFT, timer );
 
@@ -116,13 +116,13 @@ void Scene::renderGameStatistics()
 
 	std::string blt( "bullets: ");
 	blt += std::to_string( Weapon::getBulletsQuantity( ) );
-	renderFont( 255, 128, 128, 128, 1.0f, 10.0f, GAME_HEIGHT - 80.0f, HGETEXT_LEFT, blt );
+	renderFont( 255, 128, 128, 128, 1.0f, 10.0f, GAME_HEIGHT - 90.0f, HGETEXT_LEFT, blt );
 
 	std::string shl( "shells: ");
 	shl += std::to_string( Weapon::getShellsQuantity( ) );
-	renderFont( 255, 128, 128, 128, 1.0f, 10.0f, GAME_HEIGHT - 50.0f, HGETEXT_LEFT, shl );
+	renderFont( 255, 128, 128, 128, 1.0f, 10.0f, GAME_HEIGHT - 60.0f, HGETEXT_LEFT, shl );
 
 	std::string rct( "rockets: ");
 	rct += std::to_string( Weapon::getRocketsQuantity( ) );
-	renderFont( 255, 128, 128, 128, 1.0f, 10.0f, GAME_HEIGHT - 20.0f, HGETEXT_LEFT, rct );
+	renderFont( 255, 128, 128, 128, 1.0f, 10.0f, GAME_HEIGHT - 30.0f, HGETEXT_LEFT, rct );
 }

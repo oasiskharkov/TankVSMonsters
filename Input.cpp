@@ -84,7 +84,3 @@ bool Input::handleEnter( )
 {
 	return hge->Input_GetKeyState( HGEK_ENTER );
 }
-
-	
-
-	

@@ -22,7 +22,7 @@ private:
 	void renderBackground( );
 
 	// Free all sources
-	void release();
+	void release( );
 
 	// Prepare all sources
 	bool prepareSources( );

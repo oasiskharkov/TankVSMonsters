@@ -46,27 +46,41 @@ void Monster::release( )
 void Monster::frame( ) 
 {
 	m_fDeltaTime += dt;
-	if( m_fDeltaTime >= 2.0f )
+	if( m_fDeltaTime >= RECALCULATE_MONSTER_DIR_TIME )
 	{
 		recalculateDirection( );
 		m_fDeltaTime = 0.0f;
 	}
-	m_vPos += m_vDir * m_fSpeed * dt;	
+	/*hgeVector pos = m_vPos + m_vDir * m_fSpeed * dt;
+	if ( checkCollisionWithAnotherMonster( pos ) ) 
+	{
+		return;
+	}
+	m_vPos = pos;*/
+
+	m_vPos += m_vDir * m_fSpeed * dt;
 }
 
 void Monster::render( )
 {
-	if( !m_pMonsterAnimated->IsPlaying( ) )
+	if( m_pMonsterAnimated != nullptr )
 	{
-		m_pMonsterAnimated->Play( );
+		if( !m_pMonsterAnimated->IsPlaying( ) )
+		{
+			m_pMonsterAnimated->Play( );
+		}
+		else
+		{
+			m_pMonsterAnimated->Update( dt );
+		}
+
+		m_pMonsterAnimated->SetHotSpot( 128.0f, 128.0f );
+		m_pMonsterAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.2f );
 	}
 	else
 	{
-		m_pMonsterAnimated->Update( dt );
+		throw game_errors::NULL_POINTER;
 	}
-
-	m_pMonsterAnimated->SetHotSpot( 128.0f, 128.0f );
-	m_pMonsterAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.2f );
 }
 
 void Monster::recalculateDirection( )
@@ -75,3 +89,20 @@ void Monster::recalculateDirection( )
 	m_vDir.Normalize( );
 }
 
+bool Monster::checkCollisionWithAnotherMonster( const hgeVector& pos )
+{
+	std::vector<std::unique_ptr<Monster>>& monsters = objects->getMonsters( );
+
+	for( size_t i = 0; i < monsters.size( ); i++ )
+	{
+		if( monsters.at( i ) != 0 && this != monsters.at( i ).get( ) )
+		{
+			auto monsterPos = monsters.at( i )->getPosition( );
+			if( Objects::distanceBetweenPoints( pos, monsterPos ) < 2 * MONSTER_RADIUS ) 
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}

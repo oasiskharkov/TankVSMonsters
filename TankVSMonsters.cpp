@@ -7,7 +7,7 @@
 HGE* hge = 0;
 Objects* objects = 0;
 Scene* scene = 0;
-unsigned short attempts = 3;
+unsigned short attempts = 5;
 bool toExit = true;
 float dt;
 
@@ -80,9 +80,9 @@ bool RenderFunc( )
 	
 	objects->renderObjects( );
 
-	scene->renderGameStatistics();
+	scene->renderGameStatistics( );
 	
-	hge->Gfx_EndScene();
+	hge->Gfx_EndScene( );
 	return false;
 }
 
@@ -112,30 +112,33 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 				scene = Scene::getInstance( );
 				objects = Objects::getInstance( );
 			}
-			catch(game_errors& gerr)
+			catch( const game_errors& gerr )
 			{
-				switch(gerr)
+				switch( gerr )
 				{
 				case game_errors::LOAD_SCENE_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit("Can't load scene sources.");
+					ShowErrorMessageIfAnyAndSafeExit( "Can't load scene sources." );
 					return 0;
 				case game_errors::LOAD_TANK_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit("Can't load tank sources.");
+					ShowErrorMessageIfAnyAndSafeExit( "Can't load tank sources." );
 					return 0;
 				case game_errors::LOAD_MONSTER_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit("Can't load monster sources.");
+					ShowErrorMessageIfAnyAndSafeExit( "Can't load monster sources." );
 					return 0;
 				case game_errors::LOAD_WEAPON_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit("Can't load weapon sources.");
+					ShowErrorMessageIfAnyAndSafeExit( "Can't load weapon sources." );
 					return 0;
 				case game_errors::LOAD_PACKET_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit("Can't load packet sources.");
+					ShowErrorMessageIfAnyAndSafeExit( "Can't load packet sources." );
+					return 0;
+				case game_errors::UNKNOWN_ERROR: 
+					ShowErrorMessageIfAnyAndSafeExit( "Unknown error." );
 					return 0;
 				}
 			}
 			catch(...)
 			{
-				ShowErrorMessageIfAnyAndSafeExit("Something goes wrong.");
+				ShowErrorMessageIfAnyAndSafeExit( "Something goes wrong." );
 				return 0;
 			}	
 

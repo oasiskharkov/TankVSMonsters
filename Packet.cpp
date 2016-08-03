@@ -3,45 +3,19 @@
 #include "Weapon.h"
 #include "Tank.h"
 
-Packet::Packet( packet_type type ) : m_ePacketType( type )
+Packet::Packet( packet_type type, float damage, float speed, float shift, const char* packet ) :
+	m_ePacketType( type ), m_fDamage( damage ), m_fSpeed( speed ), m_fShift ( shift ) 
 {	
-	switch( m_ePacketType )
-	{
-	case packet_type::BULLET:
-		m_fDamage = BULLET_DAMAGE;
-		m_fSpeed = BULLET_SPEED;
-		m_fShift = BULLET_SHIFT;
-		m_hPacketTex = hge->Texture_Load("Resources\\bullet.png");
-		m_vDir = objects->getTank( )->getCurrentWeapon( )->getDirection( );
-		m_vPos = objects->getTank( )->getCurrentWeapon( )->getPosition( );
-		m_vPos += m_vDir * m_fShift; 
-		break;
-	case packet_type::SHELL:
-		m_fDamage = SHELL_DAMAGE;
-		m_fSpeed = SHELL_SPEED;
-		m_fShift = SHELL_SHIFT;
-		m_hPacketTex = hge->Texture_Load("Resources\\shell.png");
-		m_vDir = objects->getTank( )->getCurrentWeapon( )->getDirection( );
-		m_vPos = objects->getTank( )->getCurrentWeapon( )->getPosition( );
-		m_vPos += m_vDir * m_fShift; 
-		break;
-	case packet_type::ROCKET:
-		m_fDamage = ROCKET_DAMAGE;
-		m_fSpeed = ROCKET_SPEED;
-		m_fShift = ROCKET_SHIFT;
-		m_hPacketTex = hge->Texture_Load("Resources\\rocket.png");
-		m_vDir = objects->getTank( )->getCurrentWeapon( )->getDirection( );
-		m_vPos = objects->getTank( )->getCurrentWeapon( )->getPosition( );
-		m_vPos += m_vDir * m_fShift; 
-		break;
-	}
+	m_hPacketTex = hge->Texture_Load( packet );
+	m_vDir = objects->getTank( )->getCurrentWeapon( )->getDirection( );
+	m_vPos = objects->getTank( )->getCurrentWeapon( )->getPosition( );
+	m_vPos += m_vDir * m_fShift; 
 
-	if(!prepareResources())
+	if( !prepareResources( ) )
 	{
 		release();
 		throw game_errors::LOAD_PACKET_SOURCES;
 	}
-
 }
 
 Packet::~Packet(void)
@@ -76,15 +50,22 @@ void Packet::frame( )
 
 void Packet::render( )
 {
-	if( !m_pPacketAnimated->IsPlaying( ) )
+	if( m_pPacketAnimated != nullptr )
 	{
-		m_pPacketAnimated->Play( );
-	}
-	else
-	{
-		m_pPacketAnimated->Update( dt );
-	}
+		if( !m_pPacketAnimated->IsPlaying( ) )
+		{
+			m_pPacketAnimated->Play( );
+		}
+		else
+		{
+			m_pPacketAnimated->Update( dt );
+		}
 
-	m_pPacketAnimated->SetHotSpot( 64.0f, 64.0f );
-	m_pPacketAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.1f ); 
+		m_pPacketAnimated->SetHotSpot( 64.0f, 64.0f );
+		m_pPacketAnimated->RenderEx( m_vPos.x, m_vPos.y, m_vDir.Angle( ) + M_PI_2, 0.17f ); 
+	}
+	else 
+	{
+		throw game_errors::NULL_POINTER;
+	}
 }

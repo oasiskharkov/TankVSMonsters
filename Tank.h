@@ -42,7 +42,7 @@ private:
 	hgeSprite* m_pTankStopped;
 
 	// Prepeare tank's resources
-	bool prepareResources();
+	bool prepareResources( );
 
 	// Release all allocated memory
 	void release();
@@ -67,10 +67,10 @@ public:
 	~Tank( );
 
 	// Tank's frame calculations
-	void frame();
+	void frame( );
 
 	// Render tank
-	void render();
+	void render( );
 		
 	// Get current tank's position
 	hgeVector getPosition( ) const;
