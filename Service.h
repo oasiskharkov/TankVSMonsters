@@ -61,8 +61,8 @@ const float DAEMON_HEALTH = 0.5f;
 const float REPTILE_HEALTH = 0.8f;
 
 const float BEAST_ARMOR = 0.9f;
-const float DAEMON_ARMOR = 0.6f;
-const float REPTILE_ARMOR = 0.3f;
+const float DAEMON_ARMOR = 0.7f;
+const float REPTILE_ARMOR = 0.5f;
 
 const float BEAST_DAMAGE = 0.2f;
 const float DAEMON_DAMAGE = 0.5f;
