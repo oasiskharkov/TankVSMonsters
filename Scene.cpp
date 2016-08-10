@@ -19,7 +19,7 @@ Scene::Scene( ) : m_fTimer( 0.0f )
 	h_backgroundTex = hge->Texture_Load( "Resources\\background.png" );
 
 	// If one of the source files is not found, free all scene sources and throw an error message.
-	if( !prepareSources( ) || !m_upBackground.get( ) || !m_upFont.get( ) )
+	if( !prepareSources( ) || !m_upBackground || !m_upFont )
 	{
 		release( );
 		throw game_errors::LOAD_SCENE_SOURCES;

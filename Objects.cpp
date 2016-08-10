@@ -47,7 +47,7 @@ void Objects::prepareObjects( )
 			"Resources\\tank.png", m_vupWeapons ) );
 
 	}
-	catch(const game_errors& error)
+	catch(const game_errors& error )
 	{
 		release( );
 		throw error;
@@ -73,7 +73,7 @@ void Objects::renderPackets( )
 {
 	for(size_t i = 0; i < m_vupPackets.size( ); i++ )
 	{
-		m_vupPackets[i]->render( );
+		m_vupPackets[ i ]->render( );
 	}
 }
 

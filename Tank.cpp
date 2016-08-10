@@ -132,4 +132,3 @@ void Tank::turn( bool clockwise )
 
 	m_vDir.Rotate( angle );
 }
-

@@ -13,6 +13,8 @@ float dt;
 
 void ShowErrorMessageIfAnyAndSafeExit( const std::string& error = "" );
 void ReleaseGameSources( );
+void ProcessGameErrors( const game_errors& error );
+bool AnotherInstance( );
 
 bool FrameFunc( )
 {
@@ -103,6 +105,10 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 	hge->System_SetState( HGE_SCREENBPP, 32 );
 	hge->System_SetState( HGE_TITLE, "TankVSMonsters" );
 	
+	// Prevent Multiple Instances
+   if ( AnotherInstance( ) )
+        return false;
+
 	if( hge->System_Initiate( ) )
 	{
 		while( attempts > 0 )
@@ -111,38 +117,19 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 			{
 				scene = Scene::getInstance( );
 				objects = Objects::getInstance( );
+
+				hge->System_Start();
 			}
-			catch( const game_errors& gerr )
+			catch( const game_errors& error )
 			{
-				switch( gerr )
-				{
-				case game_errors::LOAD_SCENE_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit( "Can't load scene sources." );
-					return 0;
-				case game_errors::LOAD_TANK_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit( "Can't load tank sources." );
-					return 0;
-				case game_errors::LOAD_MONSTER_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit( "Can't load monster sources." );
-					return 0;
-				case game_errors::LOAD_WEAPON_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit( "Can't load weapon sources." );
-					return 0;
-				case game_errors::LOAD_PACKET_SOURCES:
-					ShowErrorMessageIfAnyAndSafeExit( "Can't load packet sources." );
-					return 0;
-				case game_errors::UNKNOWN_ERROR: 
-					ShowErrorMessageIfAnyAndSafeExit( "Unknown error." );
-					return 0;
-				}
+				ProcessGameErrors( error );
+				return 0;
 			}
 			catch(...)
 			{
 				ShowErrorMessageIfAnyAndSafeExit( "Something goes wrong." );
 				return 0;
 			}	
-
-			hge->System_Start();
 
 			if( toExit )
 			{
@@ -177,4 +164,48 @@ void ShowErrorMessageIfAnyAndSafeExit( const std::string& error )
 	ReleaseGameSources( );
 	hge->System_Shutdown( );
 	hge->Release( );
+}
+
+void ProcessGameErrors( const game_errors& error )
+{
+	switch( error )
+	{
+	case game_errors::LOAD_SCENE_SOURCES:
+		ShowErrorMessageIfAnyAndSafeExit( "Can't load scene sources." );
+		break;
+	case game_errors::LOAD_MONSTER_SOURCES:
+		ShowErrorMessageIfAnyAndSafeExit( "Can't load monster sources." );
+		break;
+	case game_errors::LOAD_TANK_SOURCES:
+		ShowErrorMessageIfAnyAndSafeExit( "Can't load tank sources." );
+		break;
+	case game_errors::LOAD_PACKET_SOURCES:
+		ShowErrorMessageIfAnyAndSafeExit( "Can't load packet sources." );
+		break;
+	case game_errors::LOAD_WEAPON_SOURCES:
+		ShowErrorMessageIfAnyAndSafeExit( "Can't load weapon sources." );
+		break;
+	case game_errors::NULL_POINTER:
+		ShowErrorMessageIfAnyAndSafeExit( "Reference to a null pointer." );
+		break;
+	case game_errors::UNKNOWN_ERROR: 
+		ShowErrorMessageIfAnyAndSafeExit( "Unknown error." );
+		break;
+	}
+}
+
+bool AnotherInstance( )
+{
+    HANDLE ourMutex;
+
+    // Attempt to create a mutex using unique string
+    ourMutex = CreateMutex( NULL, true, "FSDJ3_23KLH-32DDS" );
+
+	 // Another instance was found
+    if( GetLastError( ) == ERROR_ALREADY_EXISTS )
+	 {
+        return true;
+	 }
+    // This is the only one instance
+    return false;               
 }
